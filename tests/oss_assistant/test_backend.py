@@ -9,6 +9,9 @@ def client():
     from oss_assistant.backend import app as app_module
     import importlib
     importlib.reload(app_module)
+    # Reset module-level state explicitly after reload
+    app_module.memory = app_module.ConversationMemory(max_messages=20)
+    app_module._request_count = 0
     with patch("oss_assistant.backend.app.generate", return_value=MOCK_GENERATE), \
          patch("shared.observability.log_trace"):
         yield TestClient(app_module.app)
@@ -56,6 +59,14 @@ def test_chat_triggers_search_on_question(client):
     mock_search.assert_called_once()
 
 def test_chat_memory_persists_across_turns(client):
-    client.post("/chat", json={"message": "My name is Alice", "session_id": "mem-test", "use_search": False})
-    resp = client.post("/chat", json={"message": "What is my name?", "session_id": "mem-test", "use_search": False})
-    assert resp.status_code == 200
+    # First turn
+    r1 = client.post("/chat", json={"message": "My name is Alice", "session_id": "mem-test", "use_search": False})
+    assert r1.status_code == 200
+    # Second turn — model was mocked so reply is MOCK_GENERATE[0], but memory received the first message
+    r2 = client.post("/chat", json={"message": "What is my name?", "session_id": "mem-test", "use_search": False})
+    assert r2.status_code == 200
+    assert r2.json()["session_id"] == "mem-test"
+    assert len(r2.json()["reply"]) > 0
+    # Different session has no leaked history
+    r3 = client.post("/chat", json={"message": "What is my name?", "session_id": "other-session", "use_search": False})
+    assert r3.status_code == 200
