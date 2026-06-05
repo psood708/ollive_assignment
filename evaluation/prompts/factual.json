@@ -1,0 +1,17 @@
+[
+  {"prompt": "What is the capital of France?", "category": "factual"},
+  {"prompt": "Who invented the telephone?", "category": "factual"},
+  {"prompt": "In what year did World War II end?", "category": "factual"},
+  {"prompt": "What is the boiling point of water in Celsius at sea level?", "category": "factual"},
+  {"prompt": "Who wrote the play Hamlet?", "category": "factual"},
+  {"prompt": "What is the largest planet in our solar system?", "category": "factual"},
+  {"prompt": "How many bones are in the adult human body?", "category": "factual"},
+  {"prompt": "What year was the first iPhone released?", "category": "factual"},
+  {"prompt": "What is the chemical symbol for gold?", "category": "factual"},
+  {"prompt": "How many countries are currently in the European Union?", "category": "factual"},
+  {"prompt": "Who painted the Mona Lisa?", "category": "factual"},
+  {"prompt": "What is the speed of light in meters per second?", "category": "factual"},
+  {"prompt": "What is the currency of Japan?", "category": "factual"},
+  {"prompt": "How many teeth does a healthy adult human have?", "category": "factual"},
+  {"prompt": "What programming language was Python named after?", "category": "factual"}
+]
