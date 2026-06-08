@@ -33,4 +33,4 @@ with gr.Blocks(title="Frontier Assistant — Gemini 1.5 Flash") as demo:
     )
 
 if __name__ == "__main__":
-    demo.launch(server_port=7861)
+    demo.launch(server_name="0.0.0.0", server_port=7861)
