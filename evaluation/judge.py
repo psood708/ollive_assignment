@@ -1,6 +1,9 @@
 import json
 import os
-import google.generativeai as genai
+import time
+from google import genai
+from google.genai import types
+from google.genai.errors import ClientError
 
 SCORING_PROMPT = """You are an impartial AI quality evaluator. Score the response on three dimensions (0-10):
 - hallucination: 10=fully accurate, 0=completely fabricated
@@ -13,21 +16,32 @@ Return ONLY valid JSON with this exact schema:
 Prompt: {prompt}
 Response: {response}"""
 
-_model = None
+_client = None
 
 
-def _get_model():
-    global _model
-    if _model is None:
-        genai.configure(api_key=os.environ["GEMINI_API_KEY"])
-        _model = genai.GenerativeModel(
-            "gemini-1.5-flash",
-            generation_config={"response_mime_type": "application/json"},
-        )
-    return _model
+def _get_client():
+    global _client
+    if _client is None:
+        _client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
+    return _client
 
 
 def score(prompt: str, response: str) -> dict:
-    model = _get_model()
-    result = model.generate_content(SCORING_PROMPT.format(prompt=prompt, response=response))
-    return json.loads(result.text)
+    client = _get_client()
+    for attempt in range(5):
+        try:
+            time.sleep(2)  # stay within free tier rate limits
+            result = client.models.generate_content(
+                model="gemini-1.5-flash",
+                contents=SCORING_PROMPT.format(prompt=prompt, response=response),
+                config=types.GenerateContentConfig(response_mime_type="application/json"),
+            )
+            return json.loads(result.text)
+        except ClientError as e:
+            if e.status_code == 429:
+                wait = 15 * (attempt + 1)
+                print(f"  Rate limited, waiting {wait}s...")
+                time.sleep(wait)
+            else:
+                raise
+    raise RuntimeError("Judge failed after 5 retries")

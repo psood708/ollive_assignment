@@ -30,7 +30,6 @@ with gr.Blocks(title="Frontier Assistant — Gemini 1.5 Flash") as demo:
     gr.ChatInterface(
         fn=lambda msg, hist, sid, search: chat(msg, hist, sid, search),
         additional_inputs=[session_id, use_search],
-        type="messages",
     )
 
 if __name__ == "__main__":

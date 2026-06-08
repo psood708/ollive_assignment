@@ -15,7 +15,6 @@ def _load() -> None:
     _model = AutoModelForCausalLM.from_pretrained(
         MODEL_ID,
         torch_dtype=torch.float32,
-        device_map="auto",
     )
 
 def generate(message: str, history: List[Dict[str, str]]) -> Tuple[str, Dict[str, int]]:
