@@ -18,7 +18,7 @@ def client():
 def test_health_returns_gemini_model_name(client):
     resp = client.get("/health")
     assert resp.status_code == 200
-    assert resp.json()["model"] == "gemini-1.5-flash"
+    assert resp.json()["model"] == "gemini-2.0-flash"
 
 def test_chat_returns_reply(client):
     resp = client.post("/chat", json={

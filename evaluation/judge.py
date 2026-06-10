@@ -32,13 +32,13 @@ def score(prompt: str, response: str) -> dict:
         try:
             time.sleep(2)  # stay within free tier rate limits
             result = client.models.generate_content(
-                model="gemini-1.5-flash",
+                model="gemini-2.0-flash",
                 contents=SCORING_PROMPT.format(prompt=prompt, response=response),
                 config=types.GenerateContentConfig(response_mime_type="application/json"),
             )
             return json.loads(result.text)
         except ClientError as e:
-            if e.status_code == 429:
+            if e.code == 429:
                 wait = 15 * (attempt + 1)
                 print(f"  Rate limited, waiting {wait}s...")
                 time.sleep(wait)

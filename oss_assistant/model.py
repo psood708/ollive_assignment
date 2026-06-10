@@ -14,7 +14,7 @@ def _load() -> None:
     _tokenizer = AutoTokenizer.from_pretrained(MODEL_ID)
     _model = AutoModelForCausalLM.from_pretrained(
         MODEL_ID,
-        torch_dtype=torch.float32,
+        dtype=torch.float32,
     )
 
 def generate(message: str, history: List[Dict[str, str]]) -> Tuple[str, Dict[str, int]]:

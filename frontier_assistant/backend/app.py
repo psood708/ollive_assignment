@@ -10,7 +10,7 @@ from shared.tools import needs_search
 from shared.guardrails import check_input, check_output
 from shared.observability import log_trace
 
-MODEL_NAME = "gemini-1.5-flash"
+MODEL_NAME = "gemini-2.0-flash"
 memory = ConversationMemory(max_messages=20)
 _start_time = time.time()
 _request_count = 0

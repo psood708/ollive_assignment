@@ -3,7 +3,7 @@ from typing import Dict, List, Tuple
 from google import genai
 from google.genai import types
 
-MODEL_ID = "gemini-1.5-flash"
+MODEL_ID = "gemini-2.0-flash"
 _client = None
 
 
