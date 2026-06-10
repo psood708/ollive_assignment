@@ -4,7 +4,7 @@ RUN apt-get update && apt-get install -y supervisor && rm -rf /var/lib/apt/lists
 
 WORKDIR /app
 
-COPY requirements.txt .
+COPY oss_assistant/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY shared/ shared/
